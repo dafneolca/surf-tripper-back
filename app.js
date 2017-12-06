@@ -1,12 +1,22 @@
+var dotenv = require('dotenv');
+dotenv.config();
 var express = require('express');
-var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
+var user = require('./routes/user');
 var index = require('./routes/index');
 
 var app = express();
+
+mongoose.Promise = Promise;
+mongoose.connect(process.env.MONGODB_URI, {
+  keepAlive: true,
+  reconnectTries: Number.MAX_VALUE,
+  useMongoClient: true
+});
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -14,23 +24,22 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/', index);
+app.use('/user', user);
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+app.use(function (req, res) {
+  res.status(404);
+  res.json({ error: 'error.not-found' });
 });
 
 // error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  console.error('ERROR', req.method, req.path, err);
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  if (!res.headerSent) {
+    res.status(500);
+    res.json({ error: 'error.unexpected' });
+  }
 });
 
 module.exports = app;
