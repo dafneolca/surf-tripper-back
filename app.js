@@ -8,7 +8,8 @@ var mongoose = require('mongoose');
 
 var user = require('./routes/user');
 var index = require('./routes/index');
-
+var trip = require('./routes/trip');
+var cors = require('cors');
 var app = express();
 
 mongoose.Promise = Promise;
@@ -23,8 +24,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.use(cors());
+
 app.use('/', index);
 app.use('/user', user);
+app.use('/trip', trip);
 
 // catch 404 and forward to error handler
 app.use(function (req, res) {

@@ -1,17 +1,18 @@
-const mongoose = require("mongoose");
-const Trips = require("../models/trip");
-mongoose.connect("mongodb://localhost/trips");
+const mongoose = require('mongoose');
+
+const Trip = require('../models/trip').Trip;
+mongoose.connect('mongodb://localhost/trips');
 
 const trips = [
   {
-    startDate: "22.01.2018",
-    duration: 10,
+    startDate: Date.now(),
+    endDate: Date.now(),
     owner: {
-      type: Schema.Types.ObjectId,
+      type: ObjectId,
       ref: 'User'
     },
-    description: "Lets go surf in Hawaii - Hang loose guys",
-    attendees: { type: Array },
+    description: 'Lets go surf in Hawaii - Hang loose guys',
+    attendees: [],
 
     location: {
       type: { type: String },
@@ -21,10 +22,10 @@ const trips = [
 
 ];
 
-JournalEntry.create(entries, (err, entries) => {
+Trip.create(trips, (err, entries) => {
   if (err) {
     throw err;
   }
-  console.log("Success", entries);
+  console.log('Success', entries);
   mongoose.connection.close();
 });
