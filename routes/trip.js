@@ -10,6 +10,7 @@ router.get('/', (req, res, next) => {
       next(err);
       return;
     }
+    console.log(results);
     res.json(results);
   });
 });
@@ -25,18 +26,18 @@ router.get('/:id', (req, res, next) => {
       res.status(404).json({ error: 'error.not-found' });
       return;
     }
-    res.json(result);
+    res.status(200).json(result);
   });
 });
 
 /* CREATE A TRIP. */
 router.post('/', (req, res, next) => {
-  console.log('sdsfdfdfdf');
   // Take the params, and translate them into a new object
   const trip = {
+    place: req.body.place,
     startDate: req.body.startDate,
     endDate: req.body.endDate,
-    description: 'sdfdfdf',
+    description: req.body.description,
     location: {
       type: 'Point',
       coordinates: [req.body.lng, req.body.lat]

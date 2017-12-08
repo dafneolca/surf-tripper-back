@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const tripSchema = new Schema({
+  place: String,
   startDate: Date,
   endDate: Date,
   owner: {
@@ -11,7 +12,9 @@ const tripSchema = new Schema({
     ref: 'User'
   },
   description: String,
-  attendees: Array,
+  attendees: [{
+
+  }],
   location: {
     type: { type: String },
     coordinates: [Number]

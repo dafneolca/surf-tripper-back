@@ -19,6 +19,17 @@ router.post('/', (req, res, next) => {
     experienceLevel: req.body.experienceLevel
   };
 
+  /* GET ONE USER. */
+  router.get('/', (req, res, next) => {
+    User.findOne({}, (err, results) => {
+      if (err) {
+        next(err);
+        return;
+      }
+      res.json(results);
+    });
+  });
+
   const newUser = new User(user);
   // Save the product to the DB
   newUser.save((err, result) => {

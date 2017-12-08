@@ -5,7 +5,13 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   username: String,
-  password: String,
+  password: String
+},
+{
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+  },
   name: String,
   description: String,
   experienceLevel: String

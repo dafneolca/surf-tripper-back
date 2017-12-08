@@ -5,6 +5,7 @@ mongoose.connect('mongodb://localhost/trips');
 
 const trips = [
   {
+    place: String,
     startDate: Date.now(),
     endDate: Date.now(),
     owner: {
