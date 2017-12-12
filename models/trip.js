@@ -11,17 +11,21 @@ const tripSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
+  cost: Number,
+  availableSpaces: Number,
   description: String,
   attendees: [{
 
-  }],
+  }]
+  /*
   location: {
     type: { type: String },
     coordinates: [Number]
   }
+  */
 });
 
-tripSchema.index({ location: '2dsphere' });
+// tripSchema.index({ location: '2dsphere' });
 
 const Trip = mongoose.model('Trip', tripSchema);
 

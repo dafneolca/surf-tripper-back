@@ -1,93 +1,102 @@
 const express = require('express');
 const passport = require('passport');
+const router = express.Router();
 const bcrypt = require('bcrypt');
 
 // Our user model
+
+// TO USE??:
+const response = require('../helpers/response');
 const User = require('../models/user').User;
 
-const authRoutes = express.Router();
-
-authRoutes.post('/signup', (req, res, next) => {
-  console.log('req.body', req.body);
-  const username = req.body.username;
-  const password = req.body.password;
-
-  if (!username || !password) {
-    res.status(400).json({ message: 'Provide username and password' });
-    return;
+//  - - - - log in
+router.post('/login', (req, res, next) => {
+  if (req.user) {
+    return response.forbidden();
   }
 
-  User.findOne({ username }, '_id', (err, foundUser) => {
+  passport.authenticate('local', (err, user, info) => {
     if (err) {
-      next(err);
+      return next(err);
     }
-    if (foundUser) {
-      res.status(400).json({ message: 'The username already exists' });
-      return;
+    if (!user) {
+      return response.notFound(req, res);
+    }
+    req.login(user, (err) => {
+      if (err) {
+        return next(err);
+      }
+      return response.data(req, res, req.user);
+    });
+  })(req, res, next);
+});
+
+router.post('/signup', (req, res, next) => {
+  if (req.user) {
+    return response.forbidden();
+  }
+  const {
+    username,
+    email,
+    password
+  } = req.body;
+
+  if (!username) {
+    return response.unprocessable(req, res, 'Missing mandatory field "Username".');
+  }
+
+  if (!password) {
+    return response.unprocessable(req, res, 'Missing mandatory field "Password".');
+  }
+
+  if (!email) {
+    return response.unprocessable(req, res, 'Missing mandatory field "Email".');
+  }
+
+  User.findOne({
+    username
+  }, 'username', (err, userExists) => {
+    if (err) {
+      return next(err);
+    }
+    if (userExists) {
+      return response.unprocessable(req, res, 'Username already in use.');
     }
 
     const salt = bcrypt.genSaltSync(10);
     const hashPass = bcrypt.hashSync(password, salt);
 
-    const theUser = new User({
+    const newUser = User({
       username,
+      email,
       password: hashPass
     });
 
-    theUser.save((err) => {
+    newUser.save((err) => {
       if (err) {
-        res.status(400).json({ message: 'Something went wrong' });
-        return;
+        return next(err);
       }
-
-      req.login(theUser, (err) => {
+      req.login(newUser, (err) => {
         if (err) {
-          res.status(500).json({ message: 'Something went wrong' });
-          return;
+          return next(err);
         }
-
-        res.status(200).json(req.user);
+        return response.data(req, res, newUser.asData());
       });
     });
   });
 });
 
-authRoutes.post('/login', (req, res, next) => {
-  passport.authenticate('local', (err, theUser, failureDetails) => {
-    if (err) {
-      res.status(500).json({ message: 'Something went wrong' });
-      return;
-    }
-
-    if (!theUser) {
-      res.status(401).json(failureDetails);
-      return;
-    }
-
-    req.login(theUser, (err) => {
-      if (err) {
-        res.status(500).json({ message: 'Something went wrong' });
-        return;
-      }
-
-      // We are now logged in (notice req.user)
-      res.status(200).json(req.user);
-    });
-  })(req, res, next);
-});
-
-authRoutes.post('/logout', (req, res, next) => {
+router.post('/logout', (req, res) => {
   req.logout();
-  res.status(200).json({ message: 'Success' });
+  return response.ok(req, res);
 });
 
-authRoutes.get('/loggedin', (req, res, next) => {
-  if (req.isAuthenticated()) {
-    res.status(200).json(req.user);
-    return;
+router.get('/me', (req, res) => {
+  if (req.user) {
+    return response.data(req, res, req.user.asData());
   }
 
-  res.status(403).json({ message: 'Unauthorized' });
+  return response.notFound(req, res);
 });
 
-module.exports = authRoutes;
+module.exports = router;

@@ -5,17 +5,27 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   username: String,
+  experienceLevel: String,
+  description: String,
+  email: String,
   password: String
 },
 {
   timestamps: {
     createdAt: 'created_at',
     updatedAt: 'updated_at'
-  },
-  name: String,
-  description: String,
-  experienceLevel: String
+  }
 });
+
+userSchema.methods.asData = function () {
+  return {
+    id: this._id,
+    username: this.username,
+    email: this.email,
+    experienceLevel: this.experienceLevel,
+    description: this.description
+  };
+};
 
 const User = mongoose.model('User', userSchema);
 

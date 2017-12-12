@@ -14,7 +14,7 @@ const trips = [
     },
     description: 'Lets go surf in Hawaii - Hang loose guys',
     attendees: [],
-
+    places: Number,
     location: {
       type: { type: String },
       coordinates: [Number]

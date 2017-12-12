@@ -7,12 +7,10 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var cors = require('cors');
 
+const configurePassport = require('./helpers/passport');
+
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
-const passport = require('passport');
-
-const passportSetup = require('./config/passport');
-passportSetup(passport);
 
 const authRoutes = require('./routes/auth-routes');
 var user = require('./routes/user');
@@ -46,10 +44,14 @@ app.use(session({
   }
 }));
 
+const passport = configurePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(cors());
+app.use(cors({
+  credentials: true,
+  origin: ['http://localhost:4200']
+}));
 
 app.use('/', index);
 app.use('/user', user);
@@ -59,7 +61,7 @@ app.use('/auth', authRoutes);
 // catch 404 and forward to error handler
 app.use(function (req, res) {
   res.status(404);
-  res.json({ error: 'error.not-found' });
+  res.json({ error: 'Username or Password not correct' });
 });
 
 // error handler

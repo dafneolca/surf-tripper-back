@@ -13,10 +13,10 @@ router.post('/', (req, res, next) => {
   // Take the params, and translate them into a new object
   const user = {
     username: req.body.username,
-    password: req.body.password,
-    name: req.body.name,
+    experienceLevel: req.body.experienceLevel,
     description: req.body.description,
-    experienceLevel: req.body.experienceLevel
+    email: req.body.email,
+    password: req.body.password
   };
 
   /* GET ONE USER. */
@@ -39,5 +39,7 @@ router.post('/', (req, res, next) => {
     return res.status(200).json({ 'message': 'success!' });
   });
 });
+
+// authorization:
 
 module.exports = router;
