@@ -67,4 +67,21 @@ router.post('/', (req, res, next) => {
   });
 });
 
+// JOIN A TRIP  ->Created Wed.
+router.post('/', (req, res, next) => {
+  this.trip = {
+    attendees: req.body.trip.attendee
+  };
+});
+
+// $http.put('/', userId, config)
+//   .then(
+//     function (response) {
+//     // success callback
+//     },
+//     function (response) {
+//     // failure callback
+//     }
+//   );
+
 module.exports = router;

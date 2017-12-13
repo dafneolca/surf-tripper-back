@@ -74,4 +74,10 @@ app.use(function (err, req, res, next) {
   }
 });
 
+// HEROKU DEPLOYMENT
+app.use(cors({
+  credentials: true,
+  origin: [process.env.CLIENT_URL]
+}));
+
 module.exports = app;
