@@ -38,7 +38,9 @@ router.post('/signup', (req, res, next) => {
   const {
     username,
     email,
-    password
+    password,
+    description,
+    surfLevel
   } = req.body;
 
   if (!username) {
@@ -69,7 +71,9 @@ router.post('/signup', (req, res, next) => {
     const newUser = User({
       username,
       email,
-      password: hashPass
+      password: hashPass,
+      description,
+      surfLevel
     });
 
     newUser.save((err) => {

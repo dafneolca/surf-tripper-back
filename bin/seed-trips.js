@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const Trip = require('../models/trip').Trip;
-mongoose.connect('mongodb://localhost/trips');
+mongoose.connect('mongodb://localhost:27017/surf-tripper-back');
 
 const trips = [
   {

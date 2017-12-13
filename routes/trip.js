@@ -50,6 +50,7 @@ router.post('/', (req, res, next) => {
     endDate: req.body.trip.endDate,
     availableSpaces: req.body.trip.availableSpots,
     cost: req.body.trip.cost,
+    // description: req.body.trip.description,
     owner: req.body.userID
     // location: {
     //   type: 'Point',
