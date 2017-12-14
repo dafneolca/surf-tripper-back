@@ -24,7 +24,8 @@ userSchema.methods.asData = function () {
     experienceLevel: this.experienceLevel,
     userDescription: this.userDescription,
     email: this.email,
-    password: this.password
+    password: this.password,
+    tripsAttending: this.tripsAttending
 
   };
 };

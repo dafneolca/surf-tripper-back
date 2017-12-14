@@ -15,6 +15,28 @@ router.get('/', (req, res, next) => {
   });
 });
 
+/* GET ALL TRIPS THE CURRENT USER IS ATTENDING. */
+router.get('/attending', (req, res, next) => {
+  Trip.find({ attendees: req.user._id }, (err, results) => {
+    if (err) {
+      next(err);
+      return;
+    }
+    res.json(results);
+  });
+});
+
+/* GET ALL TRIPS THE CURRENT UER CREATED. */
+router.get('/created', (req, res, next) => {
+  Trip.find({ owner: req.user._id }, (err, results) => {
+    if (err) {
+      next(err);
+      return;
+    }
+    res.json(results);
+  });
+});
+
 /* GET ONE TRIP */
 router.get('/:id', (req, res, next) => {
   Trip.findOne({ _id: req.params.id })

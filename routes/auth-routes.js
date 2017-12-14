@@ -40,7 +40,8 @@ router.post('/signup', (req, res, next) => {
     experienceLevel,
     userDescription,
     email,
-    password
+    password,
+    tripsAttending
   } = req.body;
 
   if (!username) {
@@ -73,7 +74,8 @@ router.post('/signup', (req, res, next) => {
       experienceLevel,
       userDescription,
       email,
-      password
+      password,
+      tripsAttending
     });
 
     newUser.save((err) => {
