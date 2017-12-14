@@ -17,27 +17,20 @@ router.get('/', (req, res, next) => {
 
 /* GET ONE TRIP */
 router.get('/:id', (req, res, next) => {
-  Trip.findOne({ _id: req.params.id }, (err, result) => {
-    if (err) {
-      next(err);
-      return;
-    }
-    if (!result) {
-      res.status(404).json({ error: 'error.not-found' });
-      return;
-    }
-    User.findOne({ _id: result.owner }, (err, userObj) => {
+  Trip.findOne({ _id: req.params.id })
+    .populate('owner')
+    .populate('attendees')
+    .exec((err, trip) => {
       if (err) {
         next(err);
-      } else {
-        const tripDetails = {
-          trip: result,
-          user: userObj
-        };
-        res.status(200).json(tripDetails);
+        return;
       }
+      if (!trip) {
+        res.status(404).json({ error: 'error.not-found' });
+        return;
+      }
+      res.status(200).json(trip);
     });
-  });
 });
 
 /* CREATE A TRIP. */
@@ -74,7 +67,13 @@ router.post('/', (req, res, next) => {
 // JOIN A TRIP  ->Created Wed.
 router.post('/:tripId/join', (req, res, next) => {
   console.log('req.body', req.body);
-  Trip.findOneAndUpdate({ _id: req.params.tripId }, { $push: { attendees: req.body.userId } }, (err, result) => {
+  const search = { _id: req.params.tripId };
+  const updates = {
+    $push: { attendees: req.body.userId },
+    $inc: { availableSpaces: -1 }
+  };
+  const options = { new: true };
+  Trip.findOneAndUpdate(search, updates, options, (err, result) => {
     if (err) {
       next(err);
     }
