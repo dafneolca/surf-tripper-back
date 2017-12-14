@@ -43,19 +43,21 @@ router.get('/:id', (req, res, next) => {
 /* CREATE A TRIP. */
 router.post('/', (req, res, next) => {
   // Take the params, and translate them into a new object
-  console.log(req.body);
+  console.log('req body of createa a trip: ', req.body);
   const trip = {
     place: req.body.trip.place,
     startDate: req.body.trip.startDate,
     endDate: req.body.trip.endDate,
     availableSpaces: req.body.trip.availableSpots,
     cost: req.body.trip.cost,
-    // description: req.body.trip.description,
-    owner: req.body.userID
+    tripDescription: req.body.trip.tripDescription,
+    owner: req.body.userID,
+    attendees: req.body.userID
     // location: {
     //   type: 'Point',
     //   coordinates: [req.body.lng, req.body.lat]
     // }
+
   };
 
   const newTrip = new Trip(trip);
@@ -66,13 +68,18 @@ router.post('/', (req, res, next) => {
     }
     return res.status(200).json({ 'message': 'success!' });
   });
+  console.log('const trip: ', trip);
 });
 
 // JOIN A TRIP  ->Created Wed.
-router.post('/', (req, res, next) => {
-  this.trip = {
-    attendees: req.body.trip.attendee
-  };
+router.post('/:tripId/join', (req, res, next) => {
+  console.log('req.body', req.body);
+  Trip.findOneAndUpdate({ _id: req.params.tripId }, { $push: { attendees: req.body.userId } }, (err, result) => {
+    if (err) {
+      next(err);
+    }
+    res.status(200).json(result);
+  });
 });
 
 // $http.put('/', userId, config)

@@ -12,14 +12,14 @@ const user = [
     username: 'Dafne',
     password: encryptedPass,
     name: 'Also Dafne',
-    description: 'Wants to surf',
+    userDescription: 'Wants to surf',
     experienceLevel: 'Advanced Beginner'
   },
   {
     username: 'Deniz',
     password: encryptedPass,
     name: 'Dafne Deniz',
-    description: 'Wants to surf with Dafne',
+    userDescription: 'Wants to surf with Dafne',
     experienceLevel: 'Advanced'
   }
 ];

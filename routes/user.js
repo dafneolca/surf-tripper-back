@@ -14,7 +14,7 @@ router.post('/', (req, res, next) => {
   const user = {
     username: req.body.username,
     experienceLevel: req.body.experienceLevel,
-    description: req.body.description,
+    userDescription: req.body.userDescription,
     email: req.body.email,
     password: req.body.password
   };

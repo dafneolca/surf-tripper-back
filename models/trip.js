@@ -13,9 +13,10 @@ const tripSchema = new Schema({
   },
   cost: Number,
   availableSpaces: Number,
-  description: String,
+  tripDescription: String,
   attendees: [{
-
+    type: Schema.Types.ObjectId,
+    ref: 'User'
   }]
   /*
   location: {

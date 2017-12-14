@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   username: String,
   experienceLevel: String,
-  description: String,
+  userDescription: String,
   email: String,
   password: String
 },
@@ -21,9 +21,11 @@ userSchema.methods.asData = function () {
   return {
     id: this._id,
     username: this.username,
-    email: this.email,
     experienceLevel: this.experienceLevel,
-    description: this.description
+    userDescription: this.userDescription,
+    email: this.email,
+    password: this.password
+
   };
 };
 

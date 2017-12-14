@@ -12,7 +12,7 @@ const trips = [
       type: ObjectId,
       ref: 'User'
     },
-    description: 'Lets go surf in Hawaii - Hang loose guys',
+    tripDescription: String,
     attendees: [],
     places: Number,
     location: {
