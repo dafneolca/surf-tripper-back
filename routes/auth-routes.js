@@ -74,7 +74,7 @@ router.post('/signup', (req, res, next) => {
       experienceLevel,
       userDescription,
       email,
-      password,
+      password: hashPass,
       tripsAttending
     });
 
